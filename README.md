@@ -1,5 +1,7 @@
 # Fetch all transactions from the XRP ledger
 
+## RUNNING ON HOOKSNET: wss://hooks-testnet-v2.xrpl-labs.com
+
 This code allows you to fetc all transactions from the XRP ledger and insert them into Google BigQuery. 
 
 # The data is already READY TO USE 🎉!
@@ -7,7 +9,7 @@ This code allows you to fetc all transactions from the XRP ledger and insert the
 The data is already available in a **PUBLIC dataset** at Google BigQuery in:
 
 ```
-xrpledgerdata.fullhistory.transactions
+metaxrplorer.fullhistory.transactions
 ```
 
 So a working sample query with some stats would be:
@@ -19,7 +21,7 @@ SELECT
   MAX(LedgerIndex) as MaxLedger,
   COUNT(DISTINCT LedgerIndex) as LedgersWithTxCount
 FROM 
-  xrpledgerdata.fullhistory.transactions
+  metaxrplorer.fullhistory.transactions
 ```
 
 Starting Sept. 27 2018 the dataset will be backfilled from a [full history rippled node](https://twitter.com/WietseWind/status/1027957804429193216). Once up to date, I'll run a service that will add all new transactions to the dataset as well.
@@ -66,6 +68,11 @@ https://cloud.google.com/docs/authentication/getting-started
 Run `node applySchema.js`
 
 **WARNING!** If an existing table exists, the table, schema and data will be **REMOVED**!
+
+# Update network
+
+Change the wss url: `wss://hooks-testnet-v2.xrpl-labs.com` # line: 7 `index.js`
+Change the ledger start: `3803230` # line: 8 `index.js`
 
 # Insert data
 

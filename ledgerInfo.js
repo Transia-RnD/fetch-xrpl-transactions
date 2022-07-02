@@ -4,8 +4,8 @@ const Client = require('rippled-ws-client')
 const BigQuery = require('@google-cloud/bigquery')
 const bigquery = new BigQuery({ projectId: projectId })
 
-const XRPLNodeUrl = typeof process.env.NODE === 'undefined' ? 'wss://s2.ripple.com' : process.env.NODE.trim()
-const StartLedger = typeof process.env.LEDGER === 'undefined' ? 32570 : parseInt(process.env.LEDGER)
+const XRPLNodeUrl = typeof process.env.NODE === 'undefined' ? 'wss://hooks-testnet-v2.xrpl-labs.com' : process.env.NODE.trim()
+const StartLedger = typeof process.env.LEDGER === 'undefined' ? 3803230 : parseInt(process.env.LEDGER)
 
 console.log('Fetch XRPL Ledger Info into Google BigQuery')
   
@@ -89,7 +89,7 @@ new Client(XRPLNodeUrl).then(Connection => {
     query: `SELECT 
               MAX(LedgerIndex) as MaxLedger
             FROM 
-              xrpledgerdata.fullhistory.ledgers`,
+            metaxrplorer.fullhistory.ledgers`,
     useLegacySql: false, // Use standard SQL syntax for queries.
   }).then(r => {
     if (r[0][0].MaxLedger > StartLedger) {
@@ -99,7 +99,7 @@ new Client(XRPLNodeUrl).then(Connection => {
       run(StartLedger)
     }
   }).catch(e => {
-    if (e.message.match(/Not found: Table xrpledgerdata:fullhistory.ledgers was not found/)) {
+    if (e.message.match(/Not found: Table metaxrplorer:fullhistory.ledgers was not found/)) {
       console.log('>> Create table ...')
 
       const schema = [

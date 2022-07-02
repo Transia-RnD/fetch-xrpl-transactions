@@ -1,4 +1,4 @@
-const projectId = 'xrpledgerdata'
+const projectId = 'metaxrplorer'
 const datasetName = 'fullhistory'
 const tableName = 'transactions'
 
@@ -85,7 +85,7 @@ const TxTypeFields = [
     Issuer: "STRING",
     TransferFee: "INTEGER",
     NFTokenID: "STRING",
-    Destination: "STRING",
+    // Destination: "STRING",
     NFTokenSellOffer: "STRING",
     NFTokenBuyOffer: "STRING",
   }
@@ -116,6 +116,200 @@ schema = [
     mode: "NULLABLE",
     description: "metaData.DeliveredAmount"
   },
+  // {
+  //   name: "MetaData",
+  //   type: "RECORD",
+  //   description: "metaData",
+  //   fields: [
+  //     {
+  //       name: "AffectedNodes",
+  //       type: "RECORD",
+  //       mode: "REPEATED",
+  //       description: "metaData.AffectedNodes[]",
+  //       fields: [
+  //         {
+  //           name: "ModifiedNode",
+  //           type: "RECORD",
+  //           mode: "NULLABLE",
+  //           description: "metaData.AffectedNodes[].ModifiedNode",
+  //           fields: [
+  //             {
+  //               name: "FinalFields",
+  //               type: "RECORD",
+  //               description: "metaData.AffectedNodes[].ModifiedNode.FinalFields",
+  //               fields: [
+  //                 {
+  //                   name: "Account",
+  //                   type: "STRING",
+  //                   mode: "NULLABLE",
+  //                   description: "metaData.AffectedNodes[].ModifiedNode.FinalFields.Account",
+  //                 },
+  //                 {
+  //                   name: "Flags",
+  //                   type: "INTEGER",
+  //                   mode: "NULLABLE",
+  //                   description: "metaData.AffectedNodes[].ModifiedNode.FinalFields.Flags",
+  //                 },
+  //                 {
+  //                   name: "MintedNFTokens",
+  //                   type: "INTEGER",
+  //                   mode: "NULLABLE",
+  //                   description: "metaData.AffectedNodes[].ModifiedNode.FinalFields.MintedNFTokens",
+  //                 },
+  //                 {
+  //                   name: "OwnerCount",
+  //                   type: "INTEGER",
+  //                   mode: "NULLABLE",
+  //                   description: "metaData.AffectedNodes[].ModifiedNode.FinalFields.OwnerCount",
+  //                 },
+  //                 {
+  //                   name: "Sequence",
+  //                   type: "INTEGER",
+  //                   mode: "NULLABLE",
+  //                   description: "metaData.AffectedNodes[].ModifiedNode.FinalFields.Sequence",
+  //                 },
+  //                 {
+  //                   name: "NFTokens",
+  //                   type: "RECORD",
+  //                   mode: "REPEATED",
+  //                   description: "metaData.AffectedNodes[].ModifiedNode.FinalFields.NFTokens",
+  //                   fields: [
+  //                     {
+  //                       name: "NFToken",
+  //                       type: "RECORD",
+  //                       mode: "NULLABLE",
+  //                       description: "metaData.AffectedNodes[].ModifiedNode.FinalFields.NFTokens.NFToken",
+  //                       fields: [
+  //                         {
+  //                           name: "NFTokenID",
+  //                           type: "STRING",
+  //                           mode: "NULLABLE",
+  //                           description: "metaData.AffectedNodes[].ModifiedNode.FinalFields.NFTokens.NFToken.NFTokenID",
+  //                         },
+  //                         {
+  //                           name: "URI",
+  //                           type: "STRING",
+  //                           mode: "NULLABLE",
+  //                           description: "metaData.AffectedNodes[].ModifiedNode.FinalFields.NFTokens.NFToken.URI",
+  //                         },
+  //                       ]
+  //                     },
+  //                   ]
+  //                 },
+  //               ]
+  //             },
+  //             {
+  //               name: "LedgerEntryType",
+  //               type: "STRING",
+  //               mode: "NULLABLE",
+  //               description: "metaData.AffectedNodes[].ModifiedNode.LedgerEntryType",
+  //             },
+  //             {
+  //               name: "LedgerIndex",
+  //               type: "STRING",
+  //               mode: "NULLABLE",
+  //               description: "metaData.AffectedNodes[].ModifiedNode.LedgerIndex",
+  //             },
+  //             {
+  //               name: "PreviousFields",
+  //               type: "RECORD",
+  //               mode: "NULLABLE",
+  //               description: "metaData.AffectedNodes[].ModifiedNode.PreviousFields",
+  //               fields: [
+  //                 {
+  //                   name: "MintedNFTokens",
+  //                   type: "INTEGER",
+  //                   mode: "NULLABLE",
+  //                   description: "metaData.AffectedNodes[].ModifiedNode.PreviousFields.MintedNFTokens",
+  //                 },
+  //                 {
+  //                   name: "Sequence",
+  //                   type: "INTEGER",
+  //                   mode: "NULLABLE",
+  //                   description: "metaData.AffectedNodes[].ModifiedNode.PreviousFields.Sequence",
+  //                 },
+  //               ]
+  //             },
+  //             {
+  //               name: "PreviousTxnID",
+  //               type: "STRING",
+  //               mode: "NULLABLE",
+  //               description: "metaData.AffectedNodes[].ModifiedNode.PreviousTxnID",
+  //             },
+  //             {
+  //               name: "PreviousTxnLgrSeq",
+  //               type: "INTEGER",
+  //               mode: "NULLABLE",
+  //               description: "metaData.AffectedNodes[].ModifiedNode.PreviousTxnLgrSeq",
+  //             },
+  //           ]
+  //         },
+  //         {
+  //           name: "CreatedNode",
+  //           type: "RECORD",
+  //           mode: "NULLABLE",
+  //           description: "metaData.AffectedNodes[].CreatedNode",
+  //           fields: [
+  //             {
+  //               name: "NewFields",
+  //               type: "RECORD",
+  //               mode: "NULLABLE",
+  //               description: "metaData.AffectedNodes[].CreatedNode.NewFields",
+  //               fields: [
+  //                 {
+  //                   name: "MintedNFTokens",
+  //                   type: "INTEGER",
+  //                   mode: "NULLABLE",
+  //                   description: "metaData.AffectedNodes[].CreatedNode.NewFields.MintedNFTokens",
+  //                 },
+  //                 {
+  //                   name: "NFTokens",
+  //                   type: "RECORD",
+  //                   mode: "REPEATED",
+  //                   description: "metaData.AffectedNodes[].CreatedNode.NewFields.NFTokens",
+  //                   fields: [
+  //                     {
+  //                       name: "NFToken",
+  //                       type: "RECORD",
+  //                       mode: "NULLABLE",
+  //                       description: "metaData.AffectedNodes[].CreatedNode.NewFields.NFTokens.NFToken",
+  //                       fields: [
+  //                         {
+  //                           name: "NFTokenID",
+  //                           type: "STRING",
+  //                           mode: "NULLABLE",
+  //                           description: "metaData.AffectedNodes[].CreatedNode.NewFields.NFTokens.NFToken.NFTokenID",
+  //                         },
+  //                         {
+  //                           name: "URI",
+  //                           type: "STRING",
+  //                           mode: "NULLABLE",
+  //                           description: "metaData.AffectedNodes[].CreatedNode.NewFields.NFTokens.NFToken.URI",
+  //                         },
+  //                       ]
+  //                     },
+  //                   ]
+  //                 },
+  //               ]
+  //             },
+  //             {
+  //               name: "LedgerEntryType",
+  //               type: "STRING",
+  //               mode: "NULLABLE",
+  //               description: "metaData.AffectedNodes[].CreatedNode.LedgerEntryType",
+  //             },
+  //             {
+  //               name: "LedgerIndex",
+  //               type: "STRING",
+  //               mode: "NULLABLE",
+  //               description: "metaData.AffectedNodes[].CreatedNode.LedgerIndex",
+  //             },
+  //           ]
+  //         },
+  //       ]
+  //     },
+  //   ]
+  // },
   {
     name: "Memos",
     type: "RECORD",

@@ -4,11 +4,12 @@ const Client = require('rippled-ws-client')
 const BigQuery = require('@google-cloud/bigquery')
 const bigquery = new BigQuery({ projectId: projectId })
 
-const XRPLNodeUrl = typeof process.env.NODE === 'undefined' ? 'wss://s2.ripple.com' : process.env.NODE.trim()
-const StartLedger = typeof process.env.LEDGER === 'undefined' ? 32570 : parseInt(process.env.LEDGER)
+const XRPLNodeUrl = typeof process.env.NODE === 'undefined' ? 'wss://hooks-testnet-v2.xrpl-labs.com' : process.env.NODE.trim()
+const StartLedger = typeof process.env.LEDGER === 'undefined' ? 3803230 : parseInt(process.env.LEDGER)
 
 console.log('Fetch XRPL transactions into Google BigQuery')
   
+console.log(XRPLNodeUrl);
 new Client(XRPLNodeUrl).then(Connection => {
   let Stopped = false
   let LastLedger = 0
@@ -110,7 +111,6 @@ new Client(XRPLNodeUrl).then(Connection => {
               })
             }
           })
-
           if (typeof Tx.metaData.DeliveredAmount === 'undefined' && typeof Tx.metaData.delivered_amount !== 'undefined') {
             Tx.metaData.DeliveredAmount = Tx.metaData.delivered_amount
           }
@@ -121,6 +121,62 @@ new Client(XRPLNodeUrl).then(Connection => {
                 DeliveredAmount: DeliveredAmount
               })
             }
+          }
+
+          // if (typeof Tx.metaData !== 'undefined') {
+          //   Object.assign(_Tx, {
+          //     MetaData: {
+          //       AffectedNodes: Tx.metaData.AffectedNodes.map(m => {
+          //         let n = {};
+          //         if (typeof m.CreatedNode !== 'undefined') {
+          //           n.CreatedNode = {};
+          //           if (typeof m.CreatedNode.NewFields !== 'undefined')
+          //             n.CreatedNode.NewFields = {};
+          //             n.CreatedNode.NewFields.NFTokens = [];
+          //             // n.CreatedNode.NewFields = m.CreatedNode.NewFields
+          //             if (typeof m.CreatedNode.NewFields.NFTokens !== 'undefined')
+          //               n.CreatedNode.NewFields.NFTokens = m.CreatedNode.NewFields.NFTokens
+          //         }
+          //         if (typeof m.ModifiedNode !== 'undefined') {
+          //           n.ModifiedNode = {};
+          //           if (typeof m.ModifiedNode.FinalFields !== 'undefined')
+          //             n.ModifiedNode.FinalFields = {};
+          //             n.ModifiedNode.FinalFields.NFTokens = [];
+          //             // n.ModifiedNode.FinalFields = m.ModifiedNode.FinalFields
+          //             if (typeof m.ModifiedNode.FinalFields.NFTokens !== 'undefined')
+          //               n.ModifiedNode.FinalFields.NFTokens = m.ModifiedNode.FinalFields.NFTokens
+          //         }
+          //         return n
+          //       })
+          //     }
+          //   })
+          // }
+
+          const getNFTokenID = () => {
+            const cleanCreatedNodes = Tx.metaData.AffectedNodes.filter((n) => {
+              if (typeof n.CreatedNode !== 'undefined' && n.CreatedNode.LedgerEntryType === 'NFTokenPage') {
+                return true;
+              }
+              return false;
+            })
+            const cleanModifiedNodes = Tx.metaData.AffectedNodes.filter((n) => {
+              if (typeof n.ModifiedNode !== 'undefined' && n.ModifiedNode.LedgerEntryType === 'NFTokenPage') {
+                return true;
+              }
+              return false;
+            })
+            if (cleanCreatedNodes.length > 0) {
+              return cleanCreatedNodes.at(-1).CreatedNode.NewFields.NFTokens.at(-1).NFToken.NFTokenID
+            }
+            if (cleanModifiedNodes.length > 0) {
+              return cleanModifiedNodes.at(-1).ModifiedNode.FinalFields.NFTokens.at(-1).NFToken.NFTokenID
+            }
+          }
+
+          if (Tx.TransactionType === 'NFTokenMint' && typeof Tx.metaData !== 'undefined') {
+            Object.assign(_Tx, {
+              NFTokenID: getNFTokenID()
+            })
           }
 
           if (typeof Tx.Memos !== 'undefined') {
@@ -153,7 +209,6 @@ new Client(XRPLNodeUrl).then(Connection => {
               })
             }
           })
-          
           return _Tx
         })
         
@@ -209,7 +264,7 @@ new Client(XRPLNodeUrl).then(Connection => {
               MAX(LedgerIndex) as MaxLedger,
               COUNT(DISTINCT LedgerIndex) as LedgersWithTxCount
             FROM 
-              xrpledgerdata.fullhistory.transactions`,
+              metaxrplorer.fullhistory.transactions`,
     useLegacySql: false, // Use standard SQL syntax for queries.
   }).then(r => {
     if (r[0][0].MaxLedger > StartLedger) {
