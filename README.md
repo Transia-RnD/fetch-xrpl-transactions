@@ -73,5 +73,5 @@ Run `node applySchema.js`
 
 You can invoke the script from a node enabled environment by setting these environment variables:
 
-- `NODE`: the rippled node (`wss://...`) to connect to, default: **wss://s2.ripple.com**
-- `LEDGER`: the ledger index to start fetching transactions from, default: **32570**
+- `NODE`: the rippled node (`wss://...`) to connect to, default: **wss://hooks-testnet-v2.xrpl-labs.com**
+- `LEDGER`: the ledger index to start fetching transactions from, default: **3803230**
