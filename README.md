@@ -69,11 +69,6 @@ Run `node applySchema.js`
 
 **WARNING!** If an existing table exists, the table, schema and data will be **REMOVED**!
 
-# Update network
-
-Change the wss url: `wss://hooks-testnet-v2.xrpl-labs.com` # line: 7 `index.js`
-Change the ledger start: `3803230` # line: 8 `index.js`
-
 # Insert data
 
 You can invoke the script from a node enabled environment by setting these environment variables:
